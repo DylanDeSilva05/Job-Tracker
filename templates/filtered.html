@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtered Applications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 dark:bg-blue-800 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">Filtered Applications</h1>
+            <a href="/" class="text-white hover:text-blue-200 transition-all">Back to Home</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-6 flex-grow">
+        {{ if not .Applications }}
+        <div class="text-center text-gray-600 dark:text-gray-400 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            No applications found matching your criteria.
+        </div>
+        {{ else }}
+        {{ range .Applications }}
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-4">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Application ID: {{ .ID }}</h2>
+            <p class="text-gray-600 dark:text-gray-300"><strong>Company:</strong> {{ .Company }}</p>
+            <p class="text-gray-600 dark:text-gray-300"><strong>Position:</strong> {{ .Position }}</p>
+            <p class="text-gray-600 dark:text-gray-300"><strong>Application Date:</strong> {{ .ApplicationDate }}</p>
+            <p class="text-gray-600 dark:text-gray-300"><strong>Status:</strong> {{ .Status }}</p>
+        </div>
+        {{ end }}
+        {{ end }}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 dark:bg-blue-800 p-4 text-center text-white">
+        <p>&copy; 2025 Job Tracker. All rights reserved.</p>
+    </footer>
+</body>
+</html>

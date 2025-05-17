@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 dark:bg-blue-800 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">Job Tracker</h1>
+            <a href="/" class="text-white hover:text-blue-200 transition-all">Home</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-6 flex-grow">
+        <!-- Form to Create Application -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Add New Application</h2>
+            <form action="/applications" method="POST" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Company</label>
+                        <input type="text" name="company" required class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Position</label>
+                        <input type="text" name="position" required class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Application Date</label>
+                        <input type="date" name="application_date" required class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                        <select name="status" required class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                            <option value="Pending">Pending</option>
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewing">Interviewing</option>
+                            <option value="Offered">Offered</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all">Add Application</button>
+            </form>
+        </section>
+
+        <!-- Filter Form -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Filter Applications</h2>
+            <form action="/applications/filter" method="GET" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Company</label>
+                        <input type="text" name="company" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                        <select name="status" class="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                            <option value="">All Statuses</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Applied">Applied</option>
+                            <option value="Interviewing">Interviewing</option>
+                            <option value="Offered">Offered</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all">Filter</button>
+            </form>
+        </section>
+
+        <!-- Table to Display Applications -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Applications</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-gray-200 dark:bg-gray-700">
+                            <th class="p-3 text-left">ID</th>
+                            <th class="p-3 text-left">Company</th>
+                            <th class="p-3 text-left">Position</th>
+                            <th class="p-3 text-left">Application Date</th>
+                            <th class="p-3 text-left">Status</th>
+                            <th class="p-3 text-left">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range .Applications }}
+                        {{ if gt .ID 0 }}
+                        <tr class="border-b dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <td class="p-3">{{ .ID }}</td>
+                            <td class="p-3">{{ .Company }}</td>
+                            <td class="p-3">{{ .Position }}</td>
+                            <td class="p-3">{{ .ApplicationDate }}</td>
+                            <td class="p-3">{{ .Status }}</td>
+                            <td class="p-3 flex space-x-2">
+                                <form action="/applications/{{ .ID }}/delete" method="POST" class="inline">
+                                    <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700 transition-all">Delete</button>
+                                </form>
+                                <a href="/applications/{{ .ID }}/edit" class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-all">Edit</a>
+                            </td>
+                        </tr>
+                        {{ end }}
+                        {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 dark:bg-blue-800 p-4 text-center text-white">
+        <p>&copy; 2025 Job Tracker. All rights reserved.</p>
+    </footer>
+</body>
+</html>
